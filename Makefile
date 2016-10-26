@@ -42,7 +42,7 @@ run:	env
 # 
 service:	env
 	echo "Launching green unicorn in background"
-	($(INVENV) gunicorn --bind="0.0.0.0:8000" flask_leaflet:app )&
+	($(INVENV) gunicorn --certfile=ca.crt --keyfile=myserver.key --bind="0.0.0.0:8000" flask_leaflet:app )&
 
 ##
 ## Run test suite. 

@@ -11,7 +11,12 @@ version by  YaoCheng Gao
 ## Status
 
 Use mapquest reverse geocoding plugin for leaflet to get the address when user clicks or taps on map
-Use leaflet geolocation to get the user location when user initially open the map, have to use https protocol to initialize
+Use leaflet geolocation to get the user location when user initially open the map
+to get user location have to use https protocol, so I generate sever ssl certificate ca.crt and myserver.key
+for 2 command:
+    openssl req -nodes -newkey rsa:2048 -sha256 -keyout myserver.key
+    openssl req -new -x509 -key myserver.key -out ca.crt -days 3650
+
 
 ## To run automated tests 
 * `nosetests`
