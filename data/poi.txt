@@ -1,0 +1,9 @@
+#poi data
+#     lat         lng  description
+44.050187 -123.084002  Pizza Hut
+44.052543 -123.092029  Hilton Eugene
+44.054596 -123.089329  Legend of Szechuan
+44.045872 -123.065035  House of Chen Restaurant
+44.045568 -123.063365  Empire Buffet
+44.045333 -123.098117  Cafe Soriah
+

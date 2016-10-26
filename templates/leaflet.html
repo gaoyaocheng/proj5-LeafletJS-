@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>Where's the nearest karaoke?</title>
+
+        <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+        </script>
+
+        <link rel="stylesheet" href="/static/leaflet.css"> 
+        <script src="/static/leaflet.js"></script>
+
+        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key={{g.mapquestkey}}"
+        ></script>
+        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-geocoding.js?key={{g.mapquestkey}}"></script>
+
+
+        <style type="text/css">
+            html, body {
+                height: 100%;
+                padding: 0;
+                margin: 0;
+         }
+         #map {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+         }
+        </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+<script>
+var popup = L.popup(), geocode, map;
+
+var accessToken = "{{g.mapboxkey}}";
+var mapboxUrl = 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@2x.png?access_token=' + accessToken;
+var mapboxAttrib = 'Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.';
+var mapbox = new L.TileLayer(mapboxUrl, {
+    attribution: mapboxAttrib
+});
+
+var map = new L.map('map',{
+            layers: [mapbox, MQ.mapLayer()],
+            center: [37.073, -97.767],
+            zoom: 18,
+            zoomControl: true
+            }).fitWorld();
+
+map.locate({setView: true, maxZoom: 16});
+var user_marker;
+var user_latlng;
+
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+
+    user_marker = L.marker(e.latlng)
+    user_latlng = e.latlng;
+    geocode.reverse(e.latlng);
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+
+var marker;
+function onClick(e) {
+    if (marker){
+        map.removeLayer(marker);
+    }
+    marker = new L.marker(e.latlng).addTo(map);
+    geocode.reverse(e.latlng);
+}
+
+map.on('click', onClick)
+
+geocode = MQ.geocode().on('success', function(e) {
+    if (user_latlng.lat == e.result.search.latLng.lat && user_latlng.lng == e.result.search.latLng.lng) {
+        user_marker.bindTooltip("My location : " + geocode.describeLocation(e.result.best), 
+            {offset:L.point(-1,-1),permanent: true, opacity: 0.9});
+        user_marker.addTo(map);
+    } else {
+        marker.bindPopup(geocode.describeLocation(e.result.best)).openPopup();
+    }
+});
+
+{% for p in g.poi %}
+    L.marker([{{p[0]}}, {{p[1]}}]).bindTooltip("{{p[2]}}" ,
+        {offset:L.point(-1,-1),
+        permanent: true, opacity: 0.9}).addTo(map);
+{% endfor %}
+
+</script>
+</body>
+ </html>
