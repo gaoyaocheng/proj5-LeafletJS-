@@ -1,4 +1,6 @@
-
+#here is a secret file, which need 2 key,
+#mapquest_key is develop key for mapquest api
+#mapbox_key is develop key for mapbox api
 class Secret():
     def __init__(self):
       self.mapquest_key = "0QFqsOaM2IuBdUQWnAi6EZHD3GwedpjK"
