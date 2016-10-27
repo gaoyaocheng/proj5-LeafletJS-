@@ -16,7 +16,9 @@ to get user location have to use https protocol, so I generate sever ssl certifi
 for 2 command:
     openssl req -nodes -newkey rsa:2048 -sha256 -keyout myserver.key
     openssl req -new -x509 -key myserver.key -out ca.crt -days 3650
-
+## Access
+use https protocol to access the application
+URL: https://ip:8000/
 
 ## To run automated tests 
 * `nosetests`
@@ -28,6 +30,7 @@ now add trie test for trietree.py to nose tests
     bash ./configure
     make test    # make all test, should pass 
     make service # service run background
+
 
 
 
